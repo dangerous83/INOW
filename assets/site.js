@@ -33,14 +33,25 @@ revealEls.forEach(el => io.observe(el));
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-// Contact form (static demo — no backend wired up)
+// Contact form — no server backend, so it hands the enquiry to the
+// visitor's own email client addressed to info@inow.ae
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
   contactForm.addEventListener('submit', function (e) {
     e.preventDefault();
+    const name = this.name.value.trim();
+    const email = this.email.value.trim();
+    const subject = this.subject.value.trim();
+    const message = this.message.value.trim();
+
+    const mailSubject = subject ? `INOW Enquiry: ${subject}` : `INOW Enquiry from ${name}`;
+    const mailBody = `Name: ${name}\nEmail: ${email}\nInterested in: ${subject || '—'}\n\n${message}`;
+    const mailtoUrl = `mailto:info@inow.ae?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+    window.location.href = mailtoUrl;
+
     const btn = this.querySelector('.form-submit');
     const original = btn.innerHTML;
-    btn.innerHTML = 'Message Sent ✓';
+    btn.innerHTML = 'Opening Email…';
     this.reset();
     setTimeout(() => { btn.innerHTML = original; }, 2600);
   });
