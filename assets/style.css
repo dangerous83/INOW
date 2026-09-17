@@ -54,6 +54,8 @@ header.scrolled{
 header.scrolled .header-inner{padding:14px 32px;}
 .brand{display:flex;align-items:center;gap:12px;font-size:19px;letter-spacing:0.06em;font-weight:600;}
 .brand .mark{width:26px;height:26px;display:block;}
+.brand-logo{height:24px;width:auto;display:block;}
+.footer-brand-col .brand-logo{height:22px;}
 nav.links{display:flex;gap:40px;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;}
 nav.links a{position:relative;color:var(--grey-1);transition:color .3s var(--ease);padding-bottom:4px;}
 nav.links a::after{
@@ -85,7 +87,7 @@ nav.links a.active::after{width:100%;}
 }
 .hero-bg-image{
   position:absolute;inset:-4% -4% -4% -4%;width:108%;height:108%;object-fit:cover;object-position:center 30%;
-  filter:grayscale(1) contrast(1.08);
+  filter:saturate(1.15) contrast(1.08);
   animation:heroZoom 26s ease-in-out infinite alternate;
   opacity:0.95;
   clip-path:circle(0% at 72% 42%);
