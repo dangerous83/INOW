@@ -49,10 +49,10 @@ if (contactForm) {
 // Hero: cinematic reveal on load + mouse & scroll parallax
 // (parallax scroll moves the wrap; the Ken Burns zoom animates the image
 // itself, so the two transforms don't fight for the same element)
-const heroImage = document.querySelector('.hero-bg-image');
+const heroImages = document.querySelectorAll('.hero-bg-image');
 const heroWrap = document.querySelector('.hero-canvas-wrap');
-if (heroImage) {
-  requestAnimationFrame(() => heroImage.classList.add('revealed'));
+if (heroImages.length) {
+  requestAnimationFrame(() => heroImages.forEach(img => img.classList.add('revealed')));
 }
 if (heroWrap) {
   window.addEventListener('scroll', () => {
@@ -68,4 +68,37 @@ if (heroContent) {
     const y = (e.clientY / window.innerHeight - 0.5) * 10;
     heroContent.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
   });
+}
+
+// Hero slider (Home): rotates background image + heading + copy together
+const heroSlider = document.getElementById('heroSlider');
+if (heroSlider) {
+  const slideBgs = heroSlider.querySelectorAll('.hero-slide-bg');
+  const slideTexts = heroSlider.querySelectorAll('.hero-slide-text');
+  const dots = heroSlider.querySelectorAll('.hero-dots .dot');
+  let current = 0;
+  let timer;
+
+  function goToSlide(index) {
+    slideBgs.forEach((el, i) => el.classList.toggle('active', i === index));
+    slideTexts.forEach((el, i) => el.classList.toggle('active', i === index));
+    dots.forEach((el, i) => el.classList.toggle('active', i === index));
+    current = index;
+  }
+
+  function nextSlide() {
+    goToSlide((current + 1) % slideBgs.length);
+  }
+
+  function restartAutoplay() {
+    clearInterval(timer);
+    timer = setInterval(nextSlide, 6000);
+  }
+
+  dots.forEach((dot, i) => dot.addEventListener('click', () => {
+    goToSlide(i);
+    restartAutoplay();
+  }));
+
+  restartAutoplay();
 }
