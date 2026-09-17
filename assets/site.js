@@ -1,0 +1,71 @@
+// Header state on scroll
+const header = document.getElementById('siteHeader');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Mobile nav toggle
+const burger = document.getElementById('burger');
+if (burger) {
+  burger.addEventListener('click', () => {
+    document.querySelector('nav.links').classList.toggle('open');
+    burger.classList.toggle('open');
+  });
+  document.querySelectorAll('nav.links a').forEach(a => a.addEventListener('click', () => {
+    document.querySelector('nav.links').classList.remove('open');
+    burger.classList.remove('open');
+  }));
+}
+
+// Scroll reveal
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+revealEls.forEach(el => io.observe(el));
+
+// Footer year
+const yearEl = document.getElementById('year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+// Contact form (static demo — no backend wired up)
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+  contactForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const btn = this.querySelector('.form-submit');
+    const original = btn.innerHTML;
+    btn.innerHTML = 'Message Sent ✓';
+    this.reset();
+    setTimeout(() => { btn.innerHTML = original; }, 2600);
+  });
+}
+
+// Hero: cinematic reveal on load + mouse & scroll parallax
+// (parallax scroll moves the wrap; the Ken Burns zoom animates the image
+// itself, so the two transforms don't fight for the same element)
+const heroImage = document.querySelector('.hero-bg-image');
+const heroWrap = document.querySelector('.hero-canvas-wrap');
+if (heroImage) {
+  requestAnimationFrame(() => heroImage.classList.add('revealed'));
+}
+if (heroWrap) {
+  window.addEventListener('scroll', () => {
+    const offset = window.scrollY * 0.2;
+    heroWrap.style.transform = `translateY(${offset}px)`;
+  }, { passive: true });
+}
+
+const heroContent = document.querySelector('.hero-content');
+if (heroContent) {
+  window.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 10;
+    const y = (e.clientY / window.innerHeight - 0.5) * 10;
+    heroContent.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+  });
+}
